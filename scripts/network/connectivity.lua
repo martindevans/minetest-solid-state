@@ -1,5 +1,12 @@
-local network = require("scripts/network.lua");
 local names = require("scripts/names.lua");
+
+local function after_dig_node(pos, oldnode, oldmetadata)
+    minetest.chat_send_all("Dug");
+end
+
+local function after_place_node(pos, placer, itemstack, pointed_thing)
+    minetest.chat_send_all("Placed");
+end
 
 local function register_network_node(name, def)
 
@@ -9,21 +16,16 @@ local function register_network_node(name, def)
     def.groups.solid_state_network_node = 1;
 
     if not def.after_dig_node then
-        def.after_dig_node = network.after_dig_node;
+        def.after_dig_node = after_dig_node;
     end
 
     if not def.after_place_node then
-        def.after_place_node = network.after_place_node;
+        def.after_place_node = after_place_node;
     end
 
     minetest.register_node(name, def);
 end
 
 return {
-    register = function()
-        minetest.register_node(names.radio(), { tiles = { "solid_state_radio.png" } });
-        minetest.register_node(names.controller(), { tiles = { "solid_state_controller.png" } });
-    end,
-
     register_node = register_network_node,
 };
