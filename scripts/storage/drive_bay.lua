@@ -1,9 +1,9 @@
-local connectivity = require("scripts/network/connectivity.lua");
+local network = require("scripts/network/init.lua");
 local names = require("scripts/names.lua");
 local storage = require("scripts/storage/init.lua");
 
 local function register_drive_bay()
-    connectivity.register_node(names.drive_bay(), {
+    network.register_node(names.drive_bay(), {
         tiles = {
             "solid_state_drive_bay_side.png",
             "solid_state_drive_bay_side.png",

@@ -1,12 +1,12 @@
 local storage = require("scripts/storage/init.lua");
-local connectivity = require("scripts/network/connectivity.lua");
+local network = require("scripts/network/init.lua");
 local names = require("scripts/names.lua");
 
 local function cell_chest_formspec_no_cell() return "invsize[8,8;]list[context;main;1,0;1,1;]list[current_player;main;0,4;8,4;]"; end;
 local function cell_chest_formspec_cell() return cell_chest_formspec_no_cell() .. "list[context;cell;2,0;3,3;]"; end;
 
 function register_cell_chest()
-    connectivity.register_node(names.cell_chest(), {
+    network.register_node(names.cell_chest(), {
         tiles = {
             "solid_state_cell_chest_top.png",
             "solid_state_cell_chest_bot.png",
