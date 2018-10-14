@@ -1,15 +1,25 @@
 local names = require("scripts/names.lua");
 
-local function get_cell_inventory(stack_meta)
+local function get_cell_inventory_extra(stack_meta)
     local serialized_cell_inv = stack_meta:get_string("solid_state.storage_cell.serialized_inventory");
     if serialized_cell_inv ~= "" then
         local d = minetest.deserialize(serialized_cell_inv);
+        local stack_count = 0;
+        local full = true;
         for k, v in pairs(d) do
-            d[k] = ItemStack(v);
+            local stack = ItemStack(v);
+            d[k] = stack;
+            stack_count = stack_count + 1;
+            if stack:get_free_space() ~= 0 then full = false; end
         end
-        return d;
+        return d, stack_count, full;
     end
-    return {};
+    return {}, 0, true;
+end
+
+local function get_cell_inventory(stack_meta)
+    local ex = get_cell_inventory_extra(stack_meta);
+    return ex;
 end
 
 local function set_cell_inventory(stack_meta, inv_list)
@@ -31,6 +41,7 @@ local function register_cell(kb)
             storage_cell = {
                 capacity = kb,
                 get_cell_inventory = get_cell_inventory,
+                get_cell_inventory_extra = get_cell_inventory_extra,
                 set_cell_inventory = set_cell_inventory,
             }
         }

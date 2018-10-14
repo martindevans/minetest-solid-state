@@ -15,6 +15,7 @@ return {
     crafting_cpu = n("crafting_cpu"),
     crafting_coprocessor = n("crafting_coprocessor"),
     crafting_memory = function(kb) return "solid_state:crafting_memory_" .. kb .. "k"; end,
+    terminal = n("terminal"),
 
     --items
     cell = function(kb) return "solid_state:cell_" .. kb .. "k"; end

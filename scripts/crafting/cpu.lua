@@ -3,7 +3,12 @@ local names = require("scripts/names.lua");
 
 local function construct_cpu(pos)
     --Setup an initial job in the CPU task list to initialize the assembly
-    minetest.get_meta(pos):set_string("solid_state_crafting_cpu_task_list", minetest.serialize({{ name = "setup_assembly" }}));
+    local initial_task_list = { { name = "setup_assembly" } };
+    for i = 1, 25 do
+        table.insert(initial_task_list, { name = "all_chat", message = "Counter:" .. tostring(i) });
+    end
+    
+    minetest.get_meta(pos):set_string("solid_state_crafting_cpu_task_list", minetest.serialize(initial_task_list));
 end
 
 local function destruct_cpu(pos)
@@ -11,9 +16,14 @@ local function destruct_cpu(pos)
 end
 
 local task_functions = {
-    setup_assembly = function(task, tasks, assembly)
+    setup_assembly = function(task, task_list, assembly, network)
+        --todo: find all the parts of the assembly (forming a bounding box with the processor at one corner)
         minetest.chat_send_all("setup_assembly");
     end,
+
+    all_chat = function(task, _, _, _)
+        minetest.chat_send_all(task.message);
+    end
 };
 
 local function tick_cpu(pos)
@@ -41,6 +51,7 @@ local function tick_cpu(pos)
     --Save the changed state back into the node metadata
     node_meta:set_string("solid_state_crafting_cpu_task_list", minetest.serialize(task_list));
     node_meta:set_string("solid_state_crafting_assembly_state", minetest.serialize(assembly));
+    node_meta:set_string("formspec", "invsize[1,1;]label[0,0;Tasks:" .. #task_list .. "]");
 end
 
 local function register_cpu()

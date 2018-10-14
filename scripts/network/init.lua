@@ -1,13 +1,15 @@
 local names = require("scripts/names.lua");
 
 local function on_destruct(pos)
-    minetest.chat_send_all("Dug");
+    minetest.chat_send_all("Destroyed network node");
 end
 
 local function on_construct(pos)
-    local node_meta = minetest.get_meta(pos);
+    minetest.chat_send_all("Constructed network node");
 
-    node_meta:set_string("solid_state_network_controller_pos", minetest.serialize({ x = 20000, y = 20000, z = 20000 }));
+    --todo: Find the network for this node and save it
+    --local node_meta = minetest.get_meta(pos);
+    --node_meta:set_string("solid_state_network_controller_pos", minetest.serialize({ x = 1, y = 2, z = 3 }));
 end
 
 local function register_network_node(name, def)
@@ -40,11 +42,6 @@ local function register_network_node(name, def)
     minetest.register_node(name, def);
 end
 
---Find the network connected to given position
-local function find_network_controller(pos)
-    --todo: find controller on adjacent network
-end
-
 local function get_network(pos)
 
     --todo: this gets the position of the controller for this node. However controllers aren't implemented yet!
@@ -61,7 +58,7 @@ return {
     get = get_network,
     
     register = function()
-        require("scripts/network/radio.lua").register();
-        require("scripts/network/controller.lua").register();
+        --require("scripts/network/radio.lua").register();
+        --require("scripts/network/controller.lua").register();
     end
 };
